@@ -26,4 +26,7 @@ urlpatterns = [
     path('viewadmin/',views.viewadmin,name="viewadmin"),
     path('addadmin/',views.addadmin,name="addadmin"),
     path('addadmins/',views.addadmins,name="addadmins"),
+    path('deleteadmin/',views.deleteadmin,name="deleteadmin"),
+    path('deladmin/',views.deladmin,name="deladmin"),
+    path('confirmdelete/',views.confirmdelete,name="confirmdelete")
 ]

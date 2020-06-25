@@ -1,15 +1,13 @@
 {% extends "layout.html"%}
 
 {%block heading%}
-<h1 class="text-emphasis-variant">Super-Admin</h1><br><br>
+<h1 class="text-emphasis-variant">Super-Admin Page</h1><br><br>
 {%endblock%}
-
-
 {%block body%}
-
-
+<!-- partial:index.partial.html -->
+<!-- Plug Bootstrap Nav Bar code here -->
      <nav class="navbar navbar-dark bg-dark navbar-expand-lg ">
-      <a class="navbar-brand" href="#">Navbar</a>
+      <a class="navbar-brand" href="{% url 'super_admin'  %}">Back</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -30,22 +28,22 @@
               <a class="dropdown-item" href="#">Something else here</a>
             </div>
           </li>
-        <form class="form-inline my-2 my-lg-0 " action="{% url 'delete_session' %}" >
-          <button class="btn btn-outline-success my-2 my-sm-0" type="submit" value="slogout" name="logout">Logout</button>
+        <form class="form-inline my-2 my-lg-0 action=" action="{% url 'delete_session' %}">
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Logout</button>
         </form>
       </div>
     </nav>
 
     <div class="jumbotron" style=" margin-right: 200px; margin-left: 200px; margin-top: 100px;">
-    	<div class="container text-center">
-    <center>
-    <a class="btn btn-primary w-50" href="{% url 'addadmin'  %}" role="button" >Add a Club.</a><br><br>
-    <a class="btn btn-primary w-50" href="{% url 'viewadmin' %}" role="button" >Display all admins</a><br><br>
-    <a class="btn btn-primary w-50" href="http://www.google.com" role="button" >Show all clubs</a><br><br>
-    <a class="btn btn-primary w-50" href="http://www.google.com" role="button" >Delete a Club.</a><br><br>
-    <a class="btn btn-primary w-50" href="http://www.google.com" role="button" >Check out a specific club</a><br><br>
-    </center>
+        <div class="container text-center">
+      {% for k,v in data.items %}
+      <form action ="{% url 'deleteadmin' %}" >
+        {% csrf_token %}
+          <button class="btn btn-primary btn-lg w-50" >{{k}}</button><br><br>
+          <input type="hidden"  type="submit" name="admin_name" value="''{{v}}''">
+      </form>
+      {% endfor %}
+
     </div>
     </div>
-    
     {% endblock%}

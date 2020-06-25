@@ -27,11 +27,11 @@ Kokapet(Village),Gandipet,Hyderabad,Telangana-500075,www.cbit.ac.in</h5>
 
 	<div class="modal-body row">
   <div class="col-md-5">
-
-    <div class="container" style="margin: auto; width: 40%; margin-top: 100px;">
-      {% if alert %}
+    {% if alert %}
       <p style="text-align: center;">Invalid Credentials</p>
       {% endif %}
+    <div class="container" style="margin: auto; width: 40%; margin-top: 100px;">
+      
     <div class="card" style="width: 18rem;">
         <button type="button" class="btn btn-primary btn-lg"  id="sadminbutton" onclick='display("sadminbutton");' >Super-Admin</button>
   <div class="card-body" id="sadmin" style="display:none">
