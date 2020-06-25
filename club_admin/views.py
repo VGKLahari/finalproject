@@ -14,20 +14,21 @@ alert = 0
 flag=0
 alert2=0
 flag2=0
-
+delsuper=0
 global sadmintoken
 @never_cache
 def delete_session(request):
-    
+    global delsuper
     d = request.GET.get("logout")
     if(d == 'slogout'):
 
         try:
-            
+            print(request.session['suserid'])
             del request.session['suserid']
             del request.session['spassword']
+            delsuper = 1
             logout(request)
-           
+            
             return redirect(index)
         except:
             logout(request)
@@ -49,7 +50,7 @@ def delete_session(request):
 def index(request):
     global alert
     global flag
-    global deletesadmin
+    global delsuper
     #print(alert)
     #print('hello')
     
@@ -79,6 +80,7 @@ def super_admin(request):
     global alert
     global flag
     global sadmintoken
+    global delsuper
         #print('hello')
     try:                         #to check if the user is already logged in also useful when moving from sub super admin
                                      #pages to main super admin page using user made back button
@@ -89,30 +91,36 @@ def super_admin(request):
         print('hi')
         return render(request,'super_admin.html')
     except:
-        try:                         #to check if the user is logging in for the first time
+        if(request.method=='POST'):
             id=request.POST["sid"]
             pword=request.POST["spword"]
-            print(id,pword,'hello')
-            
+            #print(id,pword,'hello',delsuper)
             response = requests.post('http://localhost:5000/login',data={'username':id,'password':pword})
             result = response.json()
             try:
-                print('hjj')
-                sadmintoken=result['access_token']  #if credentials are correct return the super admin page
-                    
+                sadmintoken = result['access_token']
                 request.session['suserid'] =id
                 request.session['spassword']=pword
                 alert = 0
-                return render(request,"super_admin.html")
+                return redirect(super_admin)
             except:
-                print('khbhb')   # if wrong credentials redirect to index/home displaying "invalid credentials"
-                alert = 1
-                flag = 1
+                alert=1
+                flag=1
                 return redirect(index)
-        except:        #if the user is not logging in,also not logged in i.e reloading page 
-                                    #if the page is reloaded at form resubmission error after logout
-            print('jknjnj')
-            return redirect(adminlog)
+        else:
+
+            '''try:                         #to check if the user is logging in for the first time
+                id=request.POST["sid"]
+                pword=request.POST["spword"]
+                print(id,pword,'hello',delsuper)
+                if(delsuper==1):'''
+            try:
+                ID = request.session['suserid']
+                return render(request,'super_admin.html')
+            except:
+                return redirect(index)
+                    
+     
 
 
 @never_cache
