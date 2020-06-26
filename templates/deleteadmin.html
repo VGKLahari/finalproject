@@ -38,9 +38,10 @@
         <div class="container text-center">
       {% for k,v in data.items %}
       <form action ="{% url 'deleteadmin' %}" >
-        {% csrf_token %}
-          <button class="btn btn-primary btn-lg w-50" >{{k}}</button><br><br>
-          <input type="hidden"  type="submit" name="admin_name" value="''{{v}}''">
+        
+          <button class="btn btn-primary btn-lg w-50"  >{{k}}</button><br><br>
+          <input type="hidden"  type="submit" name="admin_name" value="{{v}}">
+          <input type="hidden"  type="submit" name="club_name" value="{{k}}">
       </form>
       {% endfor %}
 

@@ -1,0 +1,25 @@
+{% extends "layout.html"%}
+
+{%block heading%}
+<h1 class="text-emphasis-variant">New student requests</h1><br><br>
+{%endblock%}
+{% block body %}
+<div class="jumbotron" style=" margin-right: 200px; margin-left: 200px; margin-top: 20px;">
+    <div class="container text-center">
+        <center>
+        {% if len %}
+        <form action ="{% url 'dealrequests' %}" method="POST">
+            {%csrf_token%}
+            {% for c,i in packed %}
+            <h5><input type="checkbox" name ="accept" value ="{{i}}" >{{c}}</h5>
+            <br>
+            {% endfor %}
+            <button type="submit" class="btn btn-primary btn-lg w-15" >Accept</button><br>
+        </form>
+        {% else %}
+        <h3 style="text-align: center;">No new requests</h3>
+        {% endif %}
+    </center>
+    </div>
+</div>
+{% endblock %}

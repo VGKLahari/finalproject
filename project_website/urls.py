@@ -28,5 +28,12 @@ urlpatterns = [
     path('addadmins/',views.addadmins,name="addadmins"),
     path('deleteadmin/',views.deleteadmin,name="deleteadmin"),
     path('deladmin/',views.deladmin,name="deladmin"),
-    path('confirmdelete/',views.confirmdelete,name="confirmdelete")
+    path('confirmdelete/',views.confirmdelete,name="confirmdelete"),
+    path('checkclub/',views.checkclub,name="checkclub"),
+    path('checkoutclub/',views.checkoutclub,name="checkoutclub"),
+    path('forget/',views.forgetpassword,name="forgetpassword"),
+    path('reset/',views.reset,name="reset"),
+    path('reset/changepassword/',views.changepassword,name="changepassword"),
+    path('viewrequests/',views.viewrequests,name="viewrequests"),
+    path('viewrequests/dealrequests/',views.dealrequests,name="dealrequests"),
 ]

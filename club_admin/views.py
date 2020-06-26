@@ -8,17 +8,24 @@ from django.http import HttpResponse
 import requests
 from password_generator import PasswordGenerator
 from django.utils.cache import add_never_cache_headers
+import random
+import math
+from password_generator import PasswordGenerator
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
 
 # Create your views here.
 alert = 0
 flag=0
 alert2=0
 flag2=0
-delsuper=0
+club=''
+ids=[]
 global sadmintoken
 @never_cache
 def delete_session(request):
-    global delsuper
+    
     d = request.GET.get("logout")
     if(d == 'slogout'):
 
@@ -26,7 +33,6 @@ def delete_session(request):
             print(request.session['suserid'])
             del request.session['suserid']
             del request.session['spassword']
-            delsuper = 1
             logout(request)
             
             return redirect(index)
@@ -39,6 +45,10 @@ def delete_session(request):
             
             del request.session['userid']
             del request.session['password']
+            club=''
+            ids=[]
+            del request.session['club']
+            del request.session['ids']
             logout(request)
             
             return redirect(adminlog)
@@ -67,7 +77,8 @@ def index(request):
         #print(club_names)
         clubs=[]
         for i in club_names:
-            clubs.append(i['clubname'].capitalize()+"_Club")
+            clubs.append(i['clubname'])
+            
         if(flag==1):
             alert = 1
             flag = 0
@@ -80,15 +91,11 @@ def super_admin(request):
     global alert
     global flag
     global sadmintoken
-    global delsuper
-        #print('hello')
-    try:                         #to check if the user is already logged in also useful when moving from sub super admin
-                                     #pages to main super admin page using user made back button
-        print('welcome')
+    try:                        
+        
         id2=request.session['suserid']
             
         s = sadmintoken
-        print('hi')
         return render(request,'super_admin.html')
     except:
         if(request.method=='POST'):
@@ -133,46 +140,57 @@ def adminlog(request):
         a=request.session['userid']
         b=request.session['password']
         return render(request,'admin.html')'''
-    if(deleteadmin==1):
-        deleteadmin=0
-    
+
+    club = request.GET.get('club')
     if(flag2==1):
         alert2 = 1
         flag2 = 0
     else:
         alert2 = 0
     
-    return render(request,'admin2.html',{'alert':alert2})
+    return render(request,'admin2.html',{'alert':alert2,'club':club})
 
 @never_cache
 def admin(request):
     global alert2
     global flag2
     global admintoken
+    global club
     try:
         id3 = request.session['userid']
         a = admintoken
         return render(request,'admin.html')
     except:
-        try:
-            id=request.POST["id"]
-            pword=request.POST["pword"]
-            response = requests.post('http://localhost:5000/adminlog',data={'username':id,'password':pword})
+        if(request.method=='POST'):
+            
+            aid = int(request.POST["id"])
+            apword = request.POST["pword"]
+            club = request.POST["club_name"]
+            
+            #print(club)
+            response  = requests.post('http://localhost:5000/adminlog',data={'userid':aid,'password':apword,'clubname':club})
+            #print(response)
             result = response.json()
             #print(result)
             try:
+
                 admintoken=result['access_token']
-                
-                request.session['userid'] =id
-                request.session['password']=pword
+                #print('hi')    
+                request.session['userid'] =aid
+                request.session['password']=apword
+                request.session['club']=club
                 alert2 = 0
-                return render(request,"admin.html")
+                return redirect(admin)
             except:
                 alert2 = 1
                 flag2 = 1
                 return redirect(adminlog)
-        except:
-            return render(request,"admin.html")
+        else:
+            try:
+                aID =request.session['userid']
+                return render(request,'admin.html')
+            except:
+                return redirect(adminlog)
 
 
 @never_cache
@@ -231,9 +249,11 @@ def deleteadmin(request):
     if(request.session['suserid']):
         admin_name=request.GET.get("admin_name")
         club_name =request.GET.get("club_name")
+        print(admin_name,club_name)
         global sadmintoken
         response = requests.post('http://localhost:5000/clubmembers',data={'clubname':club_name},headers = {'Authorization':f'Bearer {sadmintoken}'})
         data = response.json()
+        print(data)
         for i in range(0,len(data)):
             d=dict()
             d['stuid']=data[i]['stuid']
@@ -255,3 +275,103 @@ def confirmdelete(request):
         return redirect(super_admin)
     else:
         redirect(index)
+
+def generateOTP() :
+    string = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    OTP = ""
+    length = len(string)
+    for i in range(6) :
+        OTP += string[math.floor(random.random() * length)]
+    return OTP
+@never_cache
+def forgetpassword(request):
+    global admintoken
+    otp=generateOTP()
+    adminid=request.session['userid']
+    response = requests.post('http://localhost:5000/forgetpassword',data={'userid':adminid,'otp':otp},headers = {'Authorization':f'Bearer {admintoken}'})
+    admin_emailid=response.json()
+    if 'message' not in admin_emailid:
+        subject="Change your Password"
+        html_message = render_to_string('mail_template.html', {'otp': otp,'link':'http://localhost:8000/reset/'})
+        plain_message = strip_tags(html_message)
+        from_email = 'saitejach096@gmail.com'
+        to = admin_emailid[0]['emailid']
+        send_mail(subject, plain_message, from_email, [to], html_message=html_message,fail_silently=False)
+        return HttpResponse("Success")
+    else:
+        return HttpResponse(admin_emailid['message'])
+
+@never_cache
+def reset(request):
+    return render(request,'ResetPassword.html')
+
+@never_cache
+def changepassword(request):
+    otp=request.GET.get('otp')
+    password=request.GET.get('pword')
+    print(otp,password)
+    response=requests.post('http://localhost:5000/changepassword',data={'otp':otp,'password':password})
+    result=response.json()
+    return HttpResponse(result['message'])
+@never_cache
+def checkclub(request):
+    global sadmintoken
+    response=requests.get('http://localhost:5000/adminlogin',headers = {'Authorization':f'Bearer {sadmintoken}'})
+    data=response.json()
+    admin={}
+    for i in data:
+        admin[i["clubname"]]=i["username"]
+    return render(request,'checkclub.html',{'data':admin})
+@never_cache
+def checkoutclub(request):
+    admin_name=request.GET.get("admin_name")
+    club_name =request.GET.get("club_name")
+    global sadmintoken
+    response = requests.post('http://localhost:5000/clubmembers',data={'clubname':club_name},headers = {'Authorization':f'Bearer {sadmintoken}'})
+    data = response.json()
+    for i in range(0,len(data)):
+        d=dict()
+        d['stuid']=data[i]['stuid']
+        d['name']=data[i]['name']
+        d['branch']=data[i]['branch']
+        d['crole']=data[i]['crole']
+        data[i] = d
+    #print(data)
+    return render(request,'checkoutclub.html',{'data':data,'club':club_name,'admin':admin_name})
+
+@never_cache
+def viewrequests(request):
+    global admintoken
+    global club
+    global ids
+    print(club)
+    response = requests.get('http://localhost:5000/requesttoclub',data={'clubname':club})
+    data = response.json()
+    print(data)
+    checks = []
+    ids = []
+
+    for i in data:
+        checks.append(' Request from'+' '+i['name']+','+str(i['stuid'])+','+i['branch']+','+'year'+' '+str(i['year']))
+        ids.append(i['stuid'])
+    request.session['ids']=ids     
+    return render(request,'showrequests.html',{'club':club,'len':len(data),'packed':zip(checks,ids)})
+
+@never_cache
+def dealrequests(request):
+    global admintoken
+    club = request.session['club']
+    req = request.POST.getlist('accept')
+    #print(type(req))
+    print(type(req),type(req[0]))
+    req = list(map(int,req))
+    ids=request.session['ids']
+    print(req,ids,admintoken)
+    for i in ids:
+        if i in req:
+            acceptstatus=1
+        else:
+            acceptstatus=0
+        print(acceptstatus) 
+        requests.post('http://localhost:5000/requesttoclub',data={'cid':0,'stuid':i,'clubname':club,'crole':'Member','acceptstatus':acceptstatus},headers = {'Authorization':f'Bearer {admintoken}'})
+    return redirect(admin)
