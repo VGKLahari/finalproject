@@ -39,11 +39,10 @@
     <div class="jumbotron" style=" margin-right: 200px; margin-left: 200px; margin-top: 100px;">
     	<div class="container text-center">
     <center>
-    <a class="btn btn-primary w-50" href="{% url 'addadmin'  %}" role="button" >Add a Club.</a><br><br>
-    <a class="btn btn-primary w-50" href="{% url 'viewadmin' %}" role="button" >Display all admins</a><br><br>
-    <a class="btn btn-primary w-50" href="{% url 'viewadmin' %}" role="button" >Show all clubs</a><br><br>
-    <a class="btn btn-primary w-50" href="{% url 'deladmin' %}" role="button" >Delete a Club.</a><br><br>
-    <a class="btn btn-primary w-50" href="http://www.google.com" role="button" >Check out a specific club</a><br><br>
+      <a class="btn btn-primary w-50 text-left" href="{% url 'addadmin'  %}" role="button" >&emsp;&emsp;&emsp;<i class="fas fa-users-cog"></i>&emsp;&emsp;&emsp;Add a Club.</a><br><br>
+      <a class="btn btn-primary w-50 text-left" href="{% url 'viewadmin' %}" role="button" >&emsp;&emsp;&emsp;<i class="fas fa-tv"></i>&emsp;&emsp;&emsp;Display all admins</a><br><br>
+      <a class="btn btn-primary w-50 text-left" href="{% url 'deladmin' %}" role="button" >&emsp;&emsp;&emsp;<i class="fas fa-users-slash"></i>&emsp;&emsp;&emsp;Delete a Club.</a><br><br>
+      <a class="btn btn-primary w-50 text-left" href="{% url 'checkclub' %}" role="button" >&emsp;&emsp;&emsp;<i class="fas fa-users"></i>&emsp;&emsp;&emsp;Check out a specific club</a><br><br>
     </center>
     </div>
     </div>

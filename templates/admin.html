@@ -38,11 +38,13 @@
     	<div class="container text-center">
     <center>
     <a class="btn btn-primary w-50" href="{% url 'viewrequests' %}" role="button" >Accept Joining Requests.</a><br><br>
-    <a class="btn btn-primary w-50" href="" role="button" >Display all members</a><br><br>
+    <a class="btn btn-primary w-50" href="{% url 'members' %}" role="button" >Display all members</a><br><br>
+    <a class="btn btn-primary w-50" href="{% url 'addevent' %}" role="button" >Add event</a><br><br>
     <a class="btn btn-primary w-50" href="http://www.google.com" role="button" >Show all events</a><br><br>
-    <a class="btn btn-primary w-50" href="http://www.google.com" role="button" >Delete a member.</a><br><br>
+    <a class="btn btn-primary w-50" href="{% url 'deletemembers' %}" role="button" >Delete members.</a><br><br>
     <a class="btn btn-primary w-50" href="http://www.google.com" role="button" >Check out a specific member</a><br><br>
+
     </center>
     </div>
     </div>
-    {% endblock%}
+    {% endblock%} 

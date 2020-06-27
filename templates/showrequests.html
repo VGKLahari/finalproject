@@ -8,8 +8,8 @@
     <div class="container text-center">
         <center>
         {% if len %}
-        <form action ="{% url 'dealrequests' %}" method="POST">
-            {%csrf_token%}
+        <form action ="{% url 'dealrequests' %}" >
+            
             {% for c,i in packed %}
             <h5><input type="checkbox" name ="accept" value ="{{i}}" >{{c}}</h5>
             <br>

@@ -1,0 +1,33 @@
+{% extends "layout.html"%}
+
+{%block heading%}
+<h3 class="text-emphasis-variant">Members</h3><br><br>
+{%endblock%}
+{%block body%}
+
+<div style="align-items: center;" class="container">
+    <center>
+    <table class="table table-bordered" style="width:50% ; border: 2px solid white">
+      <thead>
+        <tr style="background-color: dodgerblue; color: ghostwhite;">
+          <th style="text-align: center;">Student ID</th>
+          <th style="text-align: center;">Name</th>
+          <th style="text-align: center;">Branch</th>
+          <th style="text-align: center;">Role</th>
+        </tr>
+      </thead>
+      <tbody>
+    {% for i in data %}
+        
+        <tr class="info" style="text-align: center;">
+        {% for k,v in i.items %}
+            <td>{{v}}</td>
+        {% endfor %}
+        </tr>
+    {% endfor %}
+      </tbody>
+</table>
+</center>
+</div>
+<br>
+{% endblock %}

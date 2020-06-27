@@ -36,4 +36,9 @@ urlpatterns = [
     path('reset/changepassword/',views.changepassword,name="changepassword"),
     path('viewrequests/',views.viewrequests,name="viewrequests"),
     path('viewrequests/dealrequests/',views.dealrequests,name="dealrequests"),
+    path('addevent/',views.addevent,name="addevent"),
+    path('addevent/newevent/',views.newevent,name="newevent"),
+    path('members/',views.members,name="members"),
+    path('deletemembers/',views.deletemembers,name="deletemembers"),
+    path('deletemembers/confirmdelmembers',views.confirmdelmembers,name="confirmdelmembers")
 ]

@@ -249,11 +249,11 @@ def deleteadmin(request):
     if(request.session['suserid']):
         admin_name=request.GET.get("admin_name")
         club_name =request.GET.get("club_name")
-        print(admin_name,club_name)
+        #print(admin_name,club_name)
         global sadmintoken
         response = requests.post('http://localhost:5000/clubmembers',data={'clubname':club_name},headers = {'Authorization':f'Bearer {sadmintoken}'})
         data = response.json()
-        print(data)
+        #print(data)
         for i in range(0,len(data)):
             d=dict()
             d['stuid']=data[i]['stuid']
@@ -261,7 +261,7 @@ def deleteadmin(request):
             d['branch']=data[i]['branch']
             d['crole']=data[i]['crole']
             data[i] = d
-        print(data)
+        #print(data)
         return render(request,'confirmdelete.html',{'data':data,'club':club_name,'admin':admin_name})
     else:
         return redirect(index)
@@ -344,10 +344,10 @@ def viewrequests(request):
     global admintoken
     global club
     global ids
-    print(club)
+    #print(club)
     response = requests.get('http://localhost:5000/requesttoclub',data={'clubname':club})
     data = response.json()
-    print(data)
+    #print(data)
     checks = []
     ids = []
 
@@ -361,17 +361,78 @@ def viewrequests(request):
 def dealrequests(request):
     global admintoken
     club = request.session['club']
-    req = request.POST.getlist('accept')
+    req = request.GET.getlist('accept')
     #print(type(req))
-    print(type(req),type(req[0]))
+    #print(type(req),type(req[0]))
     req = list(map(int,req))
     ids=request.session['ids']
-    print(req,ids,admintoken)
+    #print(req,ids,admintoken)
     for i in ids:
         if i in req:
             acceptstatus=1
         else:
             acceptstatus=0
-        print(acceptstatus) 
+        #print(acceptstatus) 
         requests.post('http://localhost:5000/requesttoclub',data={'cid':0,'stuid':i,'clubname':club,'crole':'Member','acceptstatus':acceptstatus},headers = {'Authorization':f'Bearer {admintoken}'})
     return redirect(admin)
+
+@never_cache
+def addevent(request):
+    global admintoken
+    club = request.session['club']
+    return render(request,'addevent.html')
+@never_cache
+def newevent(request):
+    global admintoken
+    club = request.session['club']
+    eventname=request.GET.get("eventname")
+    desc = request.GET.get("description")
+    date = request.GET.get("eventdate")
+    print(eventname,desc,date,type(date))
+    requests.post('http://localhost:5000/displaypostevents',data={'eventname':eventname,'eventdate':date,'clubname':club,'description':desc},headers = {'Authorization':f'Bearer {admintoken}'})
+    return redirect(admin)
+
+@never_cache
+def members(request):
+    global admintoken
+    club = request.session['club']
+    response = requests.post('http://localhost:5000/clubmembers',data={'clubname':club},headers = {'Authorization':f'Bearer {admintoken}'})
+    data = response.json()
+    for i in range(0,len(data)):
+        d=dict()
+        d['stuid']=data[i]['stuid']
+        d['name']=data[i]['name']
+        d['branch']=data[i]['branch']
+        d['crole']=data[i]['crole']
+        data[i] = d
+    return render(request,'members.html',{'data':data})
+
+@never_cache
+def deletemembers(request):
+    global admintoken
+    club = request.session['club']
+    response = requests.post('http://localhost:5000/clubmembers',data={'clubname':club},headers = {'Authorization':f'Bearer {admintoken}'})
+    data = response.json()
+    id=[]
+    for i in range(0,len(data)):
+        d=dict()
+        d['stuid']=data[i]['stuid']
+        d['name']=data[i]['name']
+        d['branch']=data[i]['branch']
+        d['crole']=data[i]['crole']
+        data[i] = d
+        id.append(data[i]['stuid'])
+    return render(request,'deletemembers.html',{'data':data,'packed':zip(data,id)})
+
+@never_cache
+def confirmdelmembers(request):
+    global admintoken
+    club = request.session['club']
+    dels = request.GET.getlist('delmembers')
+    dels = list(map(int,dels))
+    for d in dels:
+        response = requests.post('http://localhost:5000/delmembers',data={'clubname':club,'stuid':d},headers = {'Authorization':f'Bearer {admintoken}'})
+    '''if(response['message']=="successfully deleted"):
+        status = 1'''
+    return redirect(deletemembers)
+
