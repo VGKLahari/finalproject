@@ -1,6 +1,4 @@
 {% extends "layout.html"%}
-{% load static %}
-
 
 {%block heading%}
 <h1 class="text-emphasis-variant">Super-Admin Page</h1><br><br>
@@ -9,9 +7,7 @@
 <!-- partial:index.partial.html -->
 <!-- Plug Bootstrap Nav Bar code here -->
      <nav class="navbar navbar-dark bg-dark navbar-expand-lg ">
-      <a class="navbar-brand" href="#">
-        <img  src="{% static 'cbit.png' %}"style="height:50px;" />
-      </a>
+      <a class="navbar-brand" href="{% url 'super_admin'  %}">Back</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -32,18 +28,23 @@
               <a class="dropdown-item" href="#">Something else here</a>
             </div>
           </li>
-        <form class="form-inline my-2 my-lg-0 action=" action="{% url 'delete_session' %}" >
-          <button class="btn btn-outline-success my-2 my-sm-0" type="submit" value="slogout" name="logout">Logout</button>
+        <form class="form-inline my-2 my-lg-0 action=" action="{% url 'delete_session' %}">
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Logout</button>
         </form>
       </div>
     </nav>
-<div class="jumbotron" style=" margin-right: 200px; margin-left: 200px; margin-top: 100px;">
-  	<div class="container text-center">
-    <a class="btn btn-primary w-50 text-left" href="{% url 'addadmin'  %}" role="button" >&emsp;&emsp;&emsp;<i class="fas fa-users-cog"></i>&emsp;&emsp;&emsp;Add a Club.</a><br><br>
-    <a class="btn btn-primary w-50 text-left" href="{% url 'viewadmin' %}" role="button" >&emsp;&emsp;&emsp;<i class="fas fa-tv"></i>&emsp;&emsp;&emsp;Display all admins</a><br><br>
-    <a class="btn btn-primary w-50 text-left" href="{% url 'deladmin' %}" role="button" >&emsp;&emsp;&emsp;<i class="fas fa-users-slash"></i>&emsp;&emsp;&emsp;Delete a Club.</a><br><br>
-    <a class="btn btn-primary w-50 text-left" href="{% url 'checkclub' %}" role="button" >&emsp;&emsp;&emsp;<i class="fas fa-users"></i>&emsp;&emsp;&emsp;Check out a specific club</a><br><br>
-    </div>
-    </div>
 
+    <div class="jumbotron" style=" margin-right: 200px; margin-left: 200px; margin-top: 100px;">
+        <div class="container text-center">
+      {% for k,v in data.items %}
+      <form action ="{% url 'checkoutclub' %}" >
+        {% csrf_token %}
+          <button class="btn btn-primary btn-lg w-50" >{{k}}</button><br><br>
+          <input type="hidden"  type="submit" name="admin_name" value="{{v}}">
+          <input type="hidden"  type="submit" name="club_name" value="{{k}}">
+      </form>
+      {% endfor %}
+
+    </div>
+    </div>
     {% endblock%}

@@ -1,0 +1,22 @@
+{% extends "layout.html"%}
+
+{%block heading%}
+<h1 class="text-emphasis-variant">Edit Admin Page</h1><br><br>
+{%endblock%}
+{%block body%}
+
+<div class="card" style="width: 18rem;align-items: center;position:absolute;left:41%">
+<div class="card-body" id="admin" >
+<h5 class="card-title">Edit ClubAdmin</h5>
+<form action ="editadmin/" method="get" >
+<div class="form-group">
+<label for="exampleInputEmail1">New AdminID</label>
+<input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter New AdminId" name="id">
+</div>
+<button type="submit" class="btn btn-primary">Update</button>
+<input type="hidden"  type="submit" name="admin_name" value="{{oldadmin}}">
+</form>
+</div>
+</div>
+
+{% endblock%}

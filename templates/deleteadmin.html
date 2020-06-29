@@ -33,8 +33,9 @@
         </form>
       </div>
     </nav>
-
+   
     <div class="jumbotron" style=" margin-right: 200px; margin-left: 200px; margin-top: 100px;">
+      <center><h3>Choose a club to delete</h3></center>
         <div class="container text-center">
       {% for k,v in data.items %}
       <form action ="{% url 'deleteadmin' %}" >

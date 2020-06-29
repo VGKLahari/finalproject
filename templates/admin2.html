@@ -1,8 +1,10 @@
 {% extends "layout.html"%}
 
 {%block heading%}
-<h1 class="text-emphasis-variant">Admin Login Page</h1><br><br>
+{ % if club % }
+<h1 class="text-emphasis-variant" style="font-family: fantasy;">{{club}} Club</h1><br><br>
 {%endblock%}
+{% endif %}
 {%block body %} 
 
 {% if alert %}

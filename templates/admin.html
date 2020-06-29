@@ -1,5 +1,5 @@
 {% extends "layout.html"%}
-
+{% load static %}
 {%block heading%}
 <h1 class="text-emphasis-variant">Admin Page</h1><br><br>
 {%endblock%}
@@ -7,7 +7,9 @@
 <!-- partial:index.partial.html -->
 <!-- Plug Bootstrap Nav Bar code here -->
      <nav class="navbar navbar-dark bg-dark navbar-expand-lg ">
-      <a class="navbar-brand" href="#">Navbar</a>
+      <a class="navbar-brand" href="#">
+        <img  src="{% static 'cbit.png' %}"style="height:50px;" />
+      </a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -22,29 +24,29 @@
               More
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="{% url 'forgetpassword' %}">Change Password</a>
+              <a class="dropdown-item" href="{% url 'forgetpassword' %}">Change password</a>
               <a class="dropdown-item" href="#">Another action</a>
               <div class="dropdown-divider"></div>
               <a class="dropdown-item" href="#">Something else here</a>
             </div>
           </li>
         <form class="form-inline my-2 my-lg-0" action="{% url 'delete_session' %}" name="admin">
-          <button class="btn btn-outline-success my-2 my-sm-0" type="submit" name="logout" value="alogout">Logout</button>
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit" name="logout" value="alogout"><i class="fas fa-power-off"></i>&nbsp;  Logout</button>
         </form>
       </div>
     </nav>
-  
-    <div class="jumbotron" style=" margin-right: 200px; margin-left: 200px; margin-top: 100px;">
-    	<div class="container text-center">
-    <center>
-    <a class="btn btn-primary w-50" href="{% url 'viewrequests' %}" role="button" >Accept Joining Requests.</a><br><br>
-    <a class="btn btn-primary w-50" href="{% url 'members' %}" role="button" >Display all members</a><br><br>
-    <a class="btn btn-primary w-50" href="{% url 'addevent' %}" role="button" >Add event</a><br><br>
-    <a class="btn btn-primary w-50" href="http://www.google.com" role="button" >Show all events</a><br><br>
-    <a class="btn btn-primary w-50" href="{% url 'deletemembers' %}" role="button" >Delete members.</a><br><br>
-    <a class="btn btn-primary w-50" href="http://www.google.com" role="button" >Check out a specific member</a><br><br>
+        <div class="jumbotron" style=" margin-right: 300px; margin-left: 300px; margin-top: 100px;">
 
-    </center>
+      <div class="container text-center">
+
+    <a class="btn btn-primary w-50 text-left" href="{% url 'viewrequests' %}" role="button">&emsp;&emsp;<i class="fas fa-user-plus"></i>&emsp;  Accept Joining Requests.</a><br><br>
+    <a class="btn btn-primary w-50 text-left" href="{% url 'members' %}" role="button" >&emsp;&emsp;<i class="fas fa-tv"></i>&emsp;&emsp;  Display all members</a><br><br>
+    <a class="btn btn-primary w-50 text-left" href="{% url 'addevent' %}" role="button" >&emsp;&emsp;<i class="far fa-calendar-alt"></i>&emsp;&emsp;  Add event</a><br><br>
+    <a class="btn btn-primary w-50 text-left" href="{% url 'events' %}" role="button" >&emsp;&emsp;<i class="far fa-calendar-alt"></i>&emsp;&emsp;  Show all events</a><br><br>
+    <a class="btn btn-primary w-50 text-left" href="{% url 'deletemembers' %}" role="button" >&emsp;&emsp;<i class="fas fa-user-minus"></i>&emsp;&emsp;  Delete members.</a><br><br>
+    
+
     </div>
     </div>
-    {% endblock%} 
+    </div>
+    {% endblock%}

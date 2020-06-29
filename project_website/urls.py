@@ -24,6 +24,7 @@ urlpatterns = [
     path('delete/', views.delete_session,name="delete_session"),
     path('adminlogin/',views.adminlog,name="adminlogin"),
     path('viewadmin/',views.viewadmin,name="viewadmin"),
+    path('mailadmin/',views.mailadmin,name="mailadmin"),
     path('addadmin/',views.addadmin,name="addadmin"),
     path('addadmins/',views.addadmins,name="addadmins"),
     path('deleteadmin/',views.deleteadmin,name="deleteadmin"),
@@ -31,6 +32,8 @@ urlpatterns = [
     path('confirmdelete/',views.confirmdelete,name="confirmdelete"),
     path('checkclub/',views.checkclub,name="checkclub"),
     path('checkoutclub/',views.checkoutclub,name="checkoutclub"),
+    path('edit/',views.edit,name="edit"),
+    path('edit/editadmin/',views.editadmin,name="editadmin"),
     path('forget/',views.forgetpassword,name="forgetpassword"),
     path('reset/',views.reset,name="reset"),
     path('reset/changepassword/',views.changepassword,name="changepassword"),
@@ -40,5 +43,7 @@ urlpatterns = [
     path('addevent/newevent/',views.newevent,name="newevent"),
     path('members/',views.members,name="members"),
     path('deletemembers/',views.deletemembers,name="deletemembers"),
-    path('deletemembers/confirmdelmembers',views.confirmdelmembers,name="confirmdelmembers")
+    path('deletemembers/confirmdelmembers',views.confirmdelmembers,name="confirmdelmembers"),
+    path('events/',views.events,name = "events")
+
 ]
